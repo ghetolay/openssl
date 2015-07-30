@@ -149,7 +149,9 @@ int ASN1_item_verify(const ASN1_ITEM *it, X509_ALGOR *a,
 
     if (signature->type == V_ASN1_BIT_STRING && signature->flags & 0x7) {
         ASN1err(ASN1_F_ASN1_ITEM_VERIFY, ASN1_R_INVALID_BIT_STRING_BITS_LEFT);
+    #ifndef OPENSSL_ASIP_NO_INVALID_BIT_STRING
         return -1;
+    #endif
     }
 
     EVP_MD_CTX_init(&ctx);

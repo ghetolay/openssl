@@ -1167,8 +1167,10 @@ static void crl_akid_check(X509_STORE_CTX *ctx, X509_CRL *crl,
         }
     }
 
-    for (cidx++; cidx < sk_X509_num(ctx->chain); cidx++) {
-        crl_issuer = sk_X509_value(ctx->chain, cidx);
+    STACK_OF(X509)* certs = ctx->lookup_certs(ctx, cnm);
+
+    for (i=0; i < sk_X509_num(certs); i++) {
+        crl_issuer = sk_X509_value(certs, i);
         if (X509_NAME_cmp(X509_get_subject_name(crl_issuer), cnm))
             continue;
         if (X509_check_akid(crl_issuer, crl->akid) == X509_V_OK) {
